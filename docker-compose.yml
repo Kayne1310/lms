@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: utc-attendance-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-attend}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-attend}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend/UtcAttendance.Api
+      dockerfile: Dockerfile
+    container_name: utc-attendance-backend
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - Kestrel__Endpoints__Http__Url=http://0.0.0.0:8080
+      - ConnectionStrings__Postgres=${ConnectionStrings__Postgres:-Host=postgres;Port=5432;Database=attend;Username=postgres;Password=postgres123}
+      - Auth__JwtSigningKey=${AUTH__JWTSIGNINGKEY:-UtcAttendanceSuperSecretJwtKey2026EdusoAutomationSecureToken99}
+      - FrontendOrigin=http://localhost:${FRONTEND_PORT:-3000}
+    volumes:
+      - backend-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: utc-attendance-frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - API_PROXY_TARGET=http://backend:8080
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data:
+  backend-keys:

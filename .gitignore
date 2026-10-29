@@ -1,0 +1,12 @@
+.env
+frontend/node_modules/
+frontend/.next/
+backend/**/bin/
+backend/**/obj/
+backend/**/appsettings.Development.json
+backend/**/publish/
+agents/curl.txt
+agents/*
+*/.vs
+backend/**/.vs
+**agents

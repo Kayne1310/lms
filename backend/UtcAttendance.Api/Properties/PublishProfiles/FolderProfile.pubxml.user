@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>G:\UTC\autodiemdanh\backend\UtcAttendance.Api\bin\Release\net10.0\publish\</_PublishTargetUrl>
+    <History>True|2026-10-29T04:49:38.3002853Z||;True|2026-10-29T11:48:35.4724412+07:00||;True|2026-10-19T19:27:48.9886057+07:00||;True|2026-10-19T19:21:01.1652242+07:00||;True|2026-10-12T16:19:49.3561847+07:00||;False|2026-10-12T16:17:36.2429126+07:00||;True|2026-10-08T22:38:12.0436574+07:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
